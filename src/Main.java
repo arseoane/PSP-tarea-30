@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 public class Main {
@@ -6,38 +7,44 @@ public class Main {
     public static void main(String[] args) {
         while (true) {
             System.out.print("\n> ");
-            String n = scanner.nextLine();
+            String n = scanner.nextLine().trim();
 
-            if (!n.contains("HOLA")) {
+            if (n.equals("ADIOS")) {
+                System.out.println("OK Hasta luego");
+                break;
+            }
+
+            if (!n.startsWith("HOLA ")) {
                 System.out.println("ERR Identifícate con HOLA");
+                continue;
             }
-            else{
-                try {
-                    String nombre = n.replace("HOLA ", "");
-                    Thread partida = new Thread(new Partida(), nombre);
-                    System.out.println("OK Hola, " + nombre);
-                    partida.start();
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("ERR Comando no válido");
-                } catch (Exception e) {
-                    break;
-                }
 
+            String nombre = n.substring(5).trim();
+
+            if (nombre.isEmpty()) {
+                System.out.println("ERR Comando no válido");
+                continue;
             }
+
+            System.out.println("OK Hola, " + nombre);
+
+            Partida partida = new Partida();
+            partida.run();
         }
     }
 
     static class Partida implements Runnable {
-        public void run(){
+        public void run() {
             int numCorrecto = new Random().nextInt(100);
 
-            while (true){
+            while (true) {
                 System.out.print("\n> ");
-                String n = scanner.nextLine();
+                String n = scanner.nextLine().trim();
 
-                try{
+                try {
                     int numero = Integer.parseInt(n);
-                    if (numero == numCorrecto){
+
+                    if (numero == numCorrecto) {
                         System.out.println("ACIERTO");
                         break;
                     } else if (numero < numCorrecto) {
@@ -46,11 +53,10 @@ public class Main {
                         System.out.println("MENOR");
                     }
                 } catch (NumberFormatException e) {
-                    if (n.equals("ADIOS")){
+                    if (n.equals("ADIOS")) {
                         System.out.println("OK Hasta luego");
                         break;
-                    }
-                    else{
+                    } else {
                         System.out.println("ERR Comando no válido");
                     }
                 }
